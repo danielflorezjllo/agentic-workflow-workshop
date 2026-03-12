@@ -4,7 +4,7 @@ There’s a principle in aviation called the 𝟏 𝐢𝐧 𝟔𝟎 𝐫𝐮𝐥
 
 That tiny deviation compounds over distance until you’re nowhere near where you intended to land
 
-![image.png](Tech%20Talk/image.png)
+![1-in-60-rule.png](Tech%20Talk/1-in-60-rule.png)
 
 ![Agentic Development Workflow.jpg](Tech%20Talk/Agentic_Development_Workflow.jpg)
 
