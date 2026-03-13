@@ -14,7 +14,7 @@
  */
 
 import { ApiError, type ErrorResponse } from "@/types/error";
-import type { ProductListResponse } from "@/types/product";
+import type { ProductFilterParams, ProductListResponse } from "@/types/product";
 import { logger } from "./logger";
 
 /**
@@ -49,13 +49,32 @@ const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:80
  * }
  * ```
  */
-export async function fetchProducts(): Promise<ProductListResponse> {
+export async function fetchProducts(filters?: ProductFilterParams): Promise<ProductListResponse> {
   const endpoint = "/api/products";
-  const url = `${API_BASE_URL}${endpoint}`;
+
+  const params = new URLSearchParams();
+  if (filters?.minimum_price_usd !== undefined) {
+    params.set("min_price_usd", String(filters.minimum_price_usd));
+  }
+  if (filters?.maximum_price_usd !== undefined) {
+    params.set("max_price_usd", String(filters.maximum_price_usd));
+  }
+  if (filters?.category) {
+    params.set("category", filters.category);
+  }
+  if (filters?.search_keyword) {
+    params.set("search_keyword", filters.search_keyword);
+  }
+  if (filters?.sort_by) {
+    params.set("sort_by", filters.sort_by);
+  }
+  const queryString = params.toString();
+  const url = `${API_BASE_URL}${endpoint}${queryString ? `?${queryString}` : ""}`;
 
   logger.info("fetching_products", {
     endpoint,
     url,
+    filters,
     operation: "fetchProducts",
   });
 
