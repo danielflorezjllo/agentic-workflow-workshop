@@ -267,7 +267,7 @@ export function ProductFilterForm({ onApplyFilters, onClearFilters, loading }: P
         {/* Action buttons */}
         <div className="flex gap-3 pt-1">
           <Button type="submit" disabled={loading}>
-            {loading ? "Loading…" : "Apply Filters"}
+            {loading ? "Loading..." : "Apply Filters"}
           </Button>
           <Button type="button" variant="outline" disabled={loading} onClick={handleClear}>
             Clear Filters

@@ -8,7 +8,6 @@ Run these tests with:
     pytest tests/test_products_filtering.py -v
 """
 
-import pytest
 from fastapi.testclient import TestClient
 
 

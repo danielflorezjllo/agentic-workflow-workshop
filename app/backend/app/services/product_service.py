@@ -80,7 +80,7 @@ def get_filtered_products(
         operation="get_filtered_products",
     )
 
-    results: list[Product] = _PRODUCTS_DATABASE
+    results: list[Product] = list(_PRODUCTS_DATABASE)
 
     if min_price_usd is not None:
         results = [p for p in results if p.product_price_usd >= min_price_usd]
@@ -93,10 +93,7 @@ def get_filtered_products(
 
     if search_keyword is not None:
         keyword_lower = search_keyword.lower()
-        results = [
-            p for p in results
-            if keyword_lower in p.product_name.lower() or keyword_lower in p.product_description.lower()
-        ]
+        results = [p for p in results if keyword_lower in p.product_name.lower() or keyword_lower in p.product_description.lower()]
 
     if sort_by == "price_asc":
         results = sorted(results, key=lambda p: p.product_price_usd)
