@@ -91,7 +91,7 @@ The interface should handle loading states, empty results, and validation errors
 
 /plan-feature
 
-I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser.
+I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser (Use Playwright MCP is Agent Browser is not available or can't be installed).
 
 Tasks
 
@@ -193,7 +193,7 @@ Commit the implementation plan only
 
 # EXECUTE
 
-/execute Implement the plan on [implement-product-filtering.md](http://implement-product-filtering.md/), you must user agent-browser to validate the frontend implementation
+/execute Implement the plan on [implement-product-filtering.md](http://implement-product-filtering.md/), you must user agent-browser to validate the frontend implementation (Use Playwright MCP is Agent Browser is not available or can't be installed).
 
 # **Feeback**
 
