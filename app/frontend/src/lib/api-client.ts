@@ -2,7 +2,7 @@
  * Type-safe API client for communicating with FastAPI backend.
  *
  * Backend endpoints (app/api/products.py, app/main.py):
- * - GET /api/products - Get all products
+ * - GET /api/products - Get all products (supports optional filter query params)
  * - GET /health - Health check
  *
  * Configuration:
@@ -14,23 +14,58 @@
  */
 
 import { ApiError, type ErrorResponse } from "@/types/error";
-import type { ProductListResponse } from "@/types/product";
+import type { ProductFilterParams, ProductListResponse } from "@/types/product";
 import { logger } from "./logger";
 
 /**
  * Backend API base URL.
  *
  * Default: http://localhost:8000 (matching backend run_api.py port)
- * TODO: Make this configurable via build-time environment variable
+ * Override via BUN_PUBLIC_API_BASE_URL environment variable.
  */
-const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL =
+  (typeof process !== "undefined" ? process.env?.BUN_PUBLIC_API_BASE_URL : undefined) ?? "http://localhost:8000";
 
 /**
- * Fetch all products from the catalog API.
+ * Build query string from ProductFilterParams, omitting undefined/empty values.
+ *
+ * @param filters - Optional filter parameters
+ * @returns URL query string (e.g. "?category=electronics&max_price_usd=50")
+ */
+function buildQueryString(filters?: ProductFilterParams): string {
+  if (!filters) {
+    return "";
+  }
+
+  const params = new URLSearchParams();
+
+  if (filters.minimum_price_usd !== undefined) {
+    params.set("min_price_usd", String(filters.minimum_price_usd));
+  }
+  if (filters.maximum_price_usd !== undefined) {
+    params.set("max_price_usd", String(filters.maximum_price_usd));
+  }
+  if (filters.category !== undefined) {
+    params.set("category", filters.category);
+  }
+  if (filters.search_keyword !== undefined && filters.search_keyword.trim() !== "") {
+    params.set("search_keyword", filters.search_keyword.trim());
+  }
+  if (filters.sort_by !== undefined) {
+    params.set("sort_by", filters.sort_by);
+  }
+
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
+/**
+ * Fetch products from the catalog API with optional filtering.
  *
  * Backend endpoint: GET /api/products
  * Response model: ProductListResponse
  *
+ * @param filters - Optional filter/sort parameters to apply
  * @returns ProductListResponse with products array and total count
  * @throws ApiError if backend returns error response (4xx/5xx)
  * @throws Error if network failure or unable to reach backend
@@ -38,7 +73,7 @@ const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:80
  * Example usage:
  * ```typescript
  * try {
- *   const response = await fetchProducts();
+ *   const response = await fetchProducts({ category: "electronics", sort_by: "price_asc" });
  *   console.log(`Loaded ${response.total_count} products`);
  * } catch (error) {
  *   if (error instanceof ApiError) {
@@ -49,13 +84,15 @@ const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:80
  * }
  * ```
  */
-export async function fetchProducts(): Promise<ProductListResponse> {
+export async function fetchProducts(filters?: ProductFilterParams): Promise<ProductListResponse> {
   const endpoint = "/api/products";
-  const url = `${API_BASE_URL}${endpoint}`;
+  const queryString = buildQueryString(filters);
+  const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
   logger.info("fetching_products", {
     endpoint,
     url,
+    filters,
     operation: "fetchProducts",
   });
 
@@ -100,6 +137,7 @@ export async function fetchProducts(): Promise<ProductListResponse> {
     logger.info("products_fetched_successfully", {
       endpoint,
       products_count: data.total_count,
+      filters,
       operation: "fetchProducts",
     });
 
