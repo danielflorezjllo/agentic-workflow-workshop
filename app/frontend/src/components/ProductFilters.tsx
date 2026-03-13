@@ -72,9 +72,9 @@ export function ProductFilters({ onApplyFilters, onClearFilters, loading }: Prod
     defaultValues: {
       minimum_price_usd: "",
       maximum_price_usd: "",
-      category: "",
+      category: "all",
       search_keyword: "",
-      sort_by: "",
+      sort_by: "default",
     },
   });
 
