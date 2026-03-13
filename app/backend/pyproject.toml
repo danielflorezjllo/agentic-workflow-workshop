@@ -55,6 +55,7 @@ select = [
 # Ignore specific rules that conflict with our patterns
 ignore = [
     "E501",  # Line too long (handled by formatter)
+    "B008",  # Function calls in default arguments (required for FastAPI Query/Depends)
 ]
 
 [tool.ruff.lint.isort]
