@@ -10,11 +10,12 @@ That tiny deviation compounds over distance until you’re nowhere near where yo
 
 # Research
 
-/prime 
+/prime
 
 Please analyze the product catalog page in the app folder end-to-end and explain how frontend and backend integrate. Identify the main files involved, the request/response flow, and the coding patterns/conventions used (data fetching, state management, services, validation, errors, pagination/filtering)
 
 # Vibe Planning
+
 I want you to present two different approaches to tackle the following tasks. Please include the pros and cons of each approach, as well as your recommendation and the reasoning behind it.
 
 Tasks
@@ -38,10 +39,10 @@ All filters should be optional and work together when combined.
 
 ## Acceptance Criteria
 
-- [ ]  All filtering tests pass
-- [ ]  Invalid inputs return appropriate HTTP 400 errors
-- [ ]  Backwards compatible (no filters = all products)
-- [ ]  Follows existing code patterns and conventions
+- [ ] All filtering tests pass
+- [ ] Invalid inputs return appropriate HTTP 400 errors
+- [ ] Backwards compatible (no filters = all products)
+- [ ] Follows existing code patterns and conventions
 
 ## Technical Notes
 
@@ -53,7 +54,7 @@ All filters should be optional and work together when combined.
 
 - All acceptance criteria met
 - All Tests passing
-`uv run pytest`
+  `uv run pytest`
 
 # [FEAT-1235] Add Product Filtering UI to Frontend
 
@@ -75,16 +76,16 @@ The interface should handle loading states, empty results, and validation errors
 
 ## Acceptance Criteria
 
-- [ ]  Price filtering interface works and sends correct query parameters
-- [ ]  Category selection filters products correctly
-- [ ]  Search input filters products by keyword
-- [ ]  Sort options reorder products as expected
-- [ ]  Multiple filters work together (combined filtering)
-- [ ]  Clear filters returns to showing all products
-- [ ]  Validation errors are displayed to users
-- [ ]  Empty state shown when no products match filters
-- [ ]  Loading state shown during filter operations
-- [ ]  All filter interactions logged to console (structured JSON)
+- [ ] Price filtering interface works and sends correct query parameters
+- [ ] Category selection filters products correctly
+- [ ] Search input filters products by keyword
+- [ ] Sort options reorder products as expected
+- [ ] Multiple filters work together (combined filtering)
+- [ ] Clear filters returns to showing all products
+- [ ] Validation errors are displayed to users
+- [ ] Empty state shown when no products match filters
+- [ ] Loading state shown during filter operations
+- [ ] All filter interactions logged to console (structured JSON)
 
 # Implementation plan
 
@@ -113,10 +114,10 @@ All filters should be optional and work together when combined.
 
 ## Acceptance Criteria
 
-- [ ]  All filtering tests pass
-- [ ]  Invalid inputs return appropriate HTTP 400 errors
-- [ ]  Backwards compatible (no filters = all products)
-- [ ]  Follows existing code patterns and conventions
+- [ ] All filtering tests pass
+- [ ] Invalid inputs return appropriate HTTP 400 errors
+- [ ] Backwards compatible (no filters = all products)
+- [ ] Follows existing code patterns and conventions
 
 ## Technical Notes
 
@@ -128,7 +129,7 @@ All filters should be optional and work together when combined.
 
 - All acceptance criteria met
 - All Tests passing
-`uv run pytest`
+  `uv run pytest`
 
 # [FEAT-1235] Add Product Filtering UI to Frontend
 
@@ -150,16 +151,16 @@ The interface should handle loading states, empty results, and validation errors
 
 ## Acceptance Criteria
 
-- [ ]  Price filtering interface works and sends correct query parameters
-- [ ]  Category selection filters products correctly
-- [ ]  Search input filters products by keyword
-- [ ]  Sort options reorder products as expected
-- [ ]  Multiple filters work together (combined filtering)
-- [ ]  Clear filters returns to showing all products
-- [ ]  Validation errors are displayed to users
-- [ ]  Empty state shown when no products match filters
-- [ ]  Loading state shown during filter operations
-- [ ]  All filter interactions logged to console (structured JSON)
+- [ ] Price filtering interface works and sends correct query parameters
+- [ ] Category selection filters products correctly
+- [ ] Search input filters products by keyword
+- [ ] Sort options reorder products as expected
+- [ ] Multiple filters work together (combined filtering)
+- [ ] Clear filters returns to showing all products
+- [ ] Validation errors are displayed to users
+- [ ] Empty state shown when no products match filters
+- [ ] Loading state shown during filter operations
+- [ ] All filter interactions logged to console (structured JSON)
 
 ## Technical Notes
 
@@ -186,8 +187,9 @@ You've completed the exercise when:
 - ✅ Filters can be applied and results update accordingly
 - ✅ You can manually test the full filtering flow in the browser
 
-# Commit the plan so it can be shared with the team later
-Commit the implementation plan only    
+# Commit the plan so it can be shared with the team later (you can also reset to the plan if something goes wrong, or have different agents implementing the same plan)
+
+Commit the implementation plan only
 
 # EXECUTE
 
@@ -200,4 +202,5 @@ When a filter is changed, the page shows a small visual flicker. It feels as if 
 It doesn’t break functionality, but it does create a sense of instability in the UI. It would be worth reviewing whether the state is triggering an unnecessary re-render or if the layout is being recalculated more than expected.
 
 # Remove the plan (it's already on commit history)
+
 Remove the implementation plan md file
