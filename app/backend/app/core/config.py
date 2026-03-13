@@ -21,7 +21,6 @@ class ApplicationSettings(BaseSettings):
     application_version: str = "0.1.0"
     log_level: str = "INFO"
     enable_cors: bool = True
-    api_port: int = 8000
 
 
 # Global settings instance
