@@ -12,7 +12,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_filter_products_by_minimum_price(test_client: TestClient) -> None:
     """
     Test filtering products by minimum price.
@@ -33,7 +32,6 @@ def test_filter_products_by_minimum_price(test_client: TestClient) -> None:
     )
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_filter_products_by_maximum_price(test_client: TestClient) -> None:
     """
     Test filtering products by maximum price.
@@ -54,7 +52,6 @@ def test_filter_products_by_maximum_price(test_client: TestClient) -> None:
     )
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_filter_products_by_price_range(test_client: TestClient) -> None:
     """
     Test filtering products by both minimum and maximum price.
@@ -75,7 +72,6 @@ def test_filter_products_by_price_range(test_client: TestClient) -> None:
     )
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_filter_products_by_category(test_client: TestClient) -> None:
     """
     Test filtering products by category.
@@ -97,7 +93,6 @@ def test_filter_products_by_category(test_client: TestClient) -> None:
     assert len(data["products"]) == 8
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_search_products_by_keyword(test_client: TestClient) -> None:
     """
     Test searching products by keyword.
@@ -119,7 +114,6 @@ def test_search_products_by_keyword(test_client: TestClient) -> None:
         assert "wireless" in name_lower or "wireless" in desc_lower
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_filter_with_multiple_parameters(test_client: TestClient) -> None:
     """
     Test filtering with multiple parameters combined.
@@ -141,7 +135,6 @@ def test_filter_with_multiple_parameters(test_client: TestClient) -> None:
     )
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_invalid_price_range_returns_400(test_client: TestClient) -> None:
     """
     Test that invalid price range (min > max) returns HTTP 400 error.
@@ -165,7 +158,6 @@ def test_invalid_price_range_returns_400(test_client: TestClient) -> None:
     assert data["error_code"] == "invalid_price_range"
 
 
-@pytest.mark.skip(reason="Not implemented yet - this is your exercise!")
 def test_no_filters_returns_all_products(test_client: TestClient) -> None:
     """
     Test that when no filters are provided, all products are returned.
