@@ -8,17 +8,89 @@ That tiny deviation compounds over distance until you’re nowhere near where yo
 
 ![Agentic Development Workflow.jpg](Tech%20Talk/Agentic_Development_Workflow.jpg)
 
-# Research / Vibe planning
+# Research
 
 /prime 
 
 Please analyze the product catalog page in the app folder end-to-end and explain how frontend and backend integrate. Identify the main files involved, the request/response flow, and the coding patterns/conventions used (data fetching, state management, services, validation, errors, pagination/filtering)
 
+# Vibe Planning
+I want you to present two different approaches to tackle the following tasks. Please include the pros and cons of each approach, as well as your recommendation and the reasoning behind it.
+
+Tasks
+
+# [FEAT-1234] Add Product Filtering to Catalog API
+
+## Description
+
+Users need to filter and search products in the catalog API. Currently `GET /api/products` returns all 30 products without filtering capabilities.
+
+## Requirements
+
+Add filtering and search capabilities to `GET /api/products`:
+
+- **Price filtering**: Support minimum and maximum price filters
+- **Category filtering**: Allow filtering by product category
+- **Keyword search**: Search product names and descriptions
+- **Sorting**: Enable sorting by price or name (both directions)
+
+All filters should be optional and work together when combined.
+
+## Acceptance Criteria
+
+- [ ]  All filtering tests pass
+- [ ]  Invalid inputs return appropriate HTTP 400 errors
+- [ ]  Backwards compatible (no filters = all products)
+- [ ]  Follows existing code patterns and conventions
+
+## Technical Notes
+
+- Validate query parameters
+- Use appropriate types for monetary values
+- Log filter operations
+
+## Definition of Done
+
+- All acceptance criteria met
+- All Tests passing
+`uv run pytest`
+
+# [FEAT-1235] Add Product Filtering UI to Frontend
+
+## Description
+
+Backend filtering capabilities are now available on `GET /api/products` with query parameters. Users need a frontend interface to interact with these filters and see filtered results.
+
+## Requirements
+
+Build a product filtering interface that connects to the backend filtering API:
+
+- **Price range controls**: Allow users to set minimum and maximum price filters
+- **Category selector**: Enable filtering by product category
+- **Search input**: Provide keyword search for product names and descriptions
+- **Sort controls**: Allow users to sort results by price or name
+- **Filter management**: Provide ability to apply and clear filters
+
+The interface should handle loading states, empty results, and validation errors appropriately.
+
+## Acceptance Criteria
+
+- [ ]  Price filtering interface works and sends correct query parameters
+- [ ]  Category selection filters products correctly
+- [ ]  Search input filters products by keyword
+- [ ]  Sort options reorder products as expected
+- [ ]  Multiple filters work together (combined filtering)
+- [ ]  Clear filters returns to showing all products
+- [ ]  Validation errors are displayed to users
+- [ ]  Empty state shown when no products match filters
+- [ ]  Loading state shown during filter operations
+- [ ]  All filter interactions logged to console (structured JSON)
+
 # Implementation plan
 
 /plan-feature
 
-I’d like you to plan the implementation. Based on these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser. The filter should include debouncing so that the user does not overload the API every time the filter changes.
+I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser. The filter should include debouncing so that the user does not overload the API every time the filter changes.
 
 Tasks
 
@@ -112,7 +184,10 @@ You've completed the exercise when:
 - ✅ Backend API accepts and processes filter parameters correctly
 - ✅ Frontend displays a working filter interface
 - ✅ Filters can be applied and results update accordingly
-    - ✅ You can manually test the full filtering flow in the browser
+- ✅ You can manually test the full filtering flow in the browser
+
+# Commit the plan so it can be shared with the team later
+Commit the implementation plan only    
 
 # EXECUTE
 
@@ -123,3 +198,6 @@ You've completed the exercise when:
 When a filter is changed, the page shows a small visual flicker. It feels as if there is a full re-render or a partial refresh happening, which affects the overall experience.
 
 It doesn’t break functionality, but it does create a sense of instability in the UI. It would be worth reviewing whether the state is triggering an unnecessary re-render or if the layout is being recalculated more than expected.
+
+# Remove the plan (it's already on commit history)
+Remove the implementation plan md file
