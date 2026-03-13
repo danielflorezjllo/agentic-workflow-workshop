@@ -91,7 +91,7 @@ The interface should handle loading states, empty results, and validation errors
 
 /plan-feature
 
-I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser. The filter should include debouncing so that the user does not overload the API every time the filter changes.
+I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser.
 
 Tasks
 
