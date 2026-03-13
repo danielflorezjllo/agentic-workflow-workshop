@@ -23,7 +23,7 @@ import { logger } from "./logger";
  * Default: http://localhost:8000 (matching backend run_api.py port)
  * TODO: Make this configurable via build-time environment variable
  */
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 /**
  * Fetch all products from the catalog API.
