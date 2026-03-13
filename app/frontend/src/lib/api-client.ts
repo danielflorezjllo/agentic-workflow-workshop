@@ -2,7 +2,7 @@
  * Type-safe API client for communicating with FastAPI backend.
  *
  * Backend endpoints (app/api/products.py, app/main.py):
- * - GET /api/products - Get all products
+ * - GET /api/products - Get all products (with optional filtering)
  * - GET /health - Health check
  *
  * Configuration:
@@ -14,7 +14,7 @@
  */
 
 import { ApiError, type ErrorResponse } from "@/types/error";
-import type { ProductListResponse } from "@/types/product";
+import type { ProductFilterParams, ProductListResponse } from "@/types/product";
 import { logger } from "./logger";
 
 /**
@@ -26,11 +26,12 @@ import { logger } from "./logger";
 const API_BASE_URL = "http://localhost:8000";
 
 /**
- * Fetch all products from the catalog API.
+ * Fetch products from the catalog API with optional filtering.
  *
  * Backend endpoint: GET /api/products
  * Response model: ProductListResponse
  *
+ * @param filters - Optional filter parameters to pass as query string
  * @returns ProductListResponse with products array and total count
  * @throws ApiError if backend returns error response (4xx/5xx)
  * @throws Error if network failure or unable to reach backend
@@ -38,7 +39,7 @@ const API_BASE_URL = "http://localhost:8000";
  * Example usage:
  * ```typescript
  * try {
- *   const response = await fetchProducts();
+ *   const response = await fetchProducts({ category: "electronics" });
  *   console.log(`Loaded ${response.total_count} products`);
  * } catch (error) {
  *   if (error instanceof ApiError) {
@@ -49,13 +50,37 @@ const API_BASE_URL = "http://localhost:8000";
  * }
  * ```
  */
-export async function fetchProducts(): Promise<ProductListResponse> {
+export async function fetchProducts(filters?: ProductFilterParams): Promise<ProductListResponse> {
   const endpoint = "/api/products";
-  const url = `${API_BASE_URL}${endpoint}`;
+
+  // Build query string from filters
+  const params = new URLSearchParams();
+  if (filters?.minimum_price_usd !== undefined) {
+    params.append("min_price_usd", String(filters.minimum_price_usd));
+  }
+  if (filters?.maximum_price_usd !== undefined) {
+    params.append("max_price_usd", String(filters.maximum_price_usd));
+  }
+  if (filters?.category) {
+    params.append("category", filters.category);
+  }
+  if (filters?.search_keyword) {
+    params.append("search_keyword", filters.search_keyword);
+  }
+  if (filters?.sort_by) {
+    params.append("sort_by", filters.sort_by);
+  }
+  const queryString = params.toString();
+  const url = `${API_BASE_URL}${endpoint}${queryString ? `?${queryString}` : ""}`;
 
   logger.info("fetching_products", {
     endpoint,
     url,
+    category: filters?.category,
+    search_keyword: filters?.search_keyword,
+    sort_by: filters?.sort_by,
+    min_price: filters?.minimum_price_usd,
+    max_price: filters?.maximum_price_usd,
     operation: "fetchProducts",
   });
 

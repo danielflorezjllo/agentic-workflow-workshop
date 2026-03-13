@@ -5,6 +5,8 @@ This service layer separates business logic from API routing logic,
 making the code more testable and maintainable.
 """
 
+from decimal import Decimal
+
 from app.core.logging_config import StructuredLogger
 from app.data.seed_products import get_seed_products
 from app.models.product import Product
@@ -42,3 +44,74 @@ def get_all_products() -> list[Product]:
     )
 
     return _PRODUCTS_DATABASE
+
+
+def filter_products(
+    min_price_usd: Decimal | None = None,
+    max_price_usd: Decimal | None = None,
+    category: str | None = None,
+    search_keyword: str | None = None,
+    sort_by: str | None = None,
+) -> list[Product]:
+    """
+    Filter and sort products based on optional criteria.
+
+    Applies filters in sequence on the in-memory product list, then sorts.
+
+    Args:
+        min_price_usd: Minimum price filter (inclusive)
+        max_price_usd: Maximum price filter (inclusive)
+        category: Category filter (exact match)
+        search_keyword: Keyword to search in product name or description (case-insensitive)
+        sort_by: Sort order — one of "price_asc", "price_desc", "name_asc", "name_desc"
+
+    Returns:
+        Filtered and sorted list of Product objects
+    """
+    logger.info(
+        "filtering_products",
+        min_price_usd=str(min_price_usd) if min_price_usd is not None else None,
+        max_price_usd=str(max_price_usd) if max_price_usd is not None else None,
+        filter_category=category,
+        search_keyword=search_keyword,
+        sort_by=sort_by,
+        total_before_filter=len(_PRODUCTS_DATABASE),
+        operation="filter_products",
+    )
+
+    results: list[Product] = list(_PRODUCTS_DATABASE)
+
+    if min_price_usd is not None:
+        results = [p for p in results if p.product_price_usd >= min_price_usd]
+
+    if max_price_usd is not None:
+        results = [p for p in results if p.product_price_usd <= max_price_usd]
+
+    if category is not None:
+        results = [p for p in results if p.product_category == category]
+
+    if search_keyword is not None:
+        keyword_lower = search_keyword.lower()
+        results = [
+            p
+            for p in results
+            if keyword_lower in p.product_name.lower() or keyword_lower in p.product_description.lower()
+        ]
+
+    if sort_by is not None:
+        if sort_by == "price_asc":
+            results.sort(key=lambda p: p.product_price_usd)
+        elif sort_by == "price_desc":
+            results.sort(key=lambda p: p.product_price_usd, reverse=True)
+        elif sort_by == "name_asc":
+            results.sort(key=lambda p: p.product_name.lower())
+        elif sort_by == "name_desc":
+            results.sort(key=lambda p: p.product_name.lower(), reverse=True)
+
+    logger.info(
+        "products_filtered_successfully",
+        products_returned=len(results),
+        operation="filter_products",
+    )
+
+    return results

@@ -19,11 +19,12 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { ProductFilters } from "@/components/ProductFilters";
 import { ProductGrid } from "@/components/ProductGrid";
 import { fetchProducts } from "@/lib/api-client";
 import { logger } from "@/lib/logger";
 import { ApiError } from "@/types/error";
-import type { Product } from "@/types/product";
+import type { Product, ProductFilterParams } from "@/types/product";
 import "./index.css";
 
 /**
@@ -45,15 +46,18 @@ export function App() {
   // State for error message (null = no error)
   const [error, setError] = useState<string | null>(null);
 
+  // State for active filters
+  const [filters, setFilters] = useState<ProductFilterParams | undefined>(undefined);
+
   /**
-   * Fetch products from backend API.
+   * Fetch products from backend API with optional filters.
    *
    * Handles both ApiError (from backend) and network errors.
    * Updates state based on result.
    */
-  const loadProducts = useCallback(async () => {
+  const loadProducts = useCallback(async (filterParams?: ProductFilterParams) => {
     logger.info("app_loading_products", {
-      operation: "initial_load",
+      operation: "load_products",
       component: "App",
     });
 
@@ -62,14 +66,14 @@ export function App() {
       setError(null);
 
       // Call backend API
-      const response = await fetchProducts();
+      const response = await fetchProducts(filterParams);
 
       // Update state with fetched products
       setProducts(response.products);
 
       logger.info("app_products_loaded", {
         products_count: response.total_count,
-        operation: "initial_load",
+        operation: "load_products",
         component: "App",
       });
     } catch (err) {
@@ -87,7 +91,7 @@ export function App() {
         error_message: errorMessage,
         error_type: err instanceof ApiError ? "api_error" : "network_error",
         error_code: err instanceof ApiError ? err.errorResponse.error_code : undefined,
-        operation: "initial_load",
+        operation: "load_products",
         component: "App",
         fix_suggestion:
           err instanceof ApiError
@@ -98,6 +102,19 @@ export function App() {
       setLoading(false);
     }
   }, []);
+
+  const handleApplyFilters = useCallback(
+    (newFilters: ProductFilterParams) => {
+      setFilters(newFilters);
+      loadProducts(newFilters);
+    },
+    [loadProducts]
+  );
+
+  const handleClearFilters = useCallback(() => {
+    setFilters(undefined);
+    loadProducts();
+  }, [loadProducts]);
 
   // Load products on component mount
   useEffect(() => {
@@ -115,7 +132,9 @@ export function App() {
               ? "Loading products..."
               : error
                 ? "Error loading products"
-                : `Browse our collection of ${products.length} products`}
+                : filters
+                  ? `Showing ${products.length} filtered products`
+                  : `Browse our collection of ${products.length} products`}
           </p>
         </div>
       </header>
@@ -164,8 +183,11 @@ export function App() {
             </div>
           </div>
         ) : (
-          // Success/Loading state - show product grid
-          <ProductGrid products={products} loading={loading} />
+          // Success/Loading state - show filter form and product grid
+          <>
+            <ProductFilters onApplyFilters={handleApplyFilters} onClearFilters={handleClearFilters} loading={loading} />
+            <ProductGrid products={products} loading={loading} />
+          </>
         )}
       </main>
 
