@@ -2,7 +2,7 @@
  * Type-safe API client for communicating with FastAPI backend.
  *
  * Backend endpoints (app/api/products.py, app/main.py):
- * - GET /api/products - Get all products
+ * - GET /api/products - Get all products (supports optional filter query params)
  * - GET /health - Health check
  *
  * Configuration:
@@ -14,7 +14,7 @@
  */
 
 import { ApiError, type ErrorResponse } from "@/types/error";
-import type { ProductListResponse } from "@/types/product";
+import type { ProductFilterParams, ProductListResponse } from "@/types/product";
 import { logger } from "./logger";
 
 /**
@@ -26,11 +26,45 @@ import { logger } from "./logger";
 const API_BASE_URL = "http://localhost:8000";
 
 /**
- * Fetch all products from the catalog API.
+ * Build a URL query string from ProductFilterParams.
+ *
+ * Only includes params that have a value. Maps frontend field names to the
+ * backend query parameter names expected by GET /api/products.
+ */
+function buildFilterQueryString(filters?: ProductFilterParams): string {
+  if (!filters) {
+    return "";
+  }
+
+  const params = new URLSearchParams();
+
+  if (filters.minimum_price_usd !== undefined) {
+    params.set("min_price_usd", String(filters.minimum_price_usd));
+  }
+  if (filters.maximum_price_usd !== undefined) {
+    params.set("max_price_usd", String(filters.maximum_price_usd));
+  }
+  if (filters.category !== undefined) {
+    params.set("category", filters.category);
+  }
+  if (filters.search_keyword !== undefined && filters.search_keyword.trim() !== "") {
+    params.set("search_keyword", filters.search_keyword.trim());
+  }
+  if (filters.sort_by !== undefined) {
+    params.set("sort_by", filters.sort_by);
+  }
+
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
+/**
+ * Fetch products from the catalog API with optional filtering.
  *
  * Backend endpoint: GET /api/products
  * Response model: ProductListResponse
  *
+ * @param filters - Optional filter parameters to narrow the product list
  * @returns ProductListResponse with products array and total count
  * @throws ApiError if backend returns error response (4xx/5xx)
  * @throws Error if network failure or unable to reach backend
@@ -38,7 +72,7 @@ const API_BASE_URL = "http://localhost:8000";
  * Example usage:
  * ```typescript
  * try {
- *   const response = await fetchProducts();
+ *   const response = await fetchProducts({ category: "electronics" });
  *   console.log(`Loaded ${response.total_count} products`);
  * } catch (error) {
  *   if (error instanceof ApiError) {
@@ -49,13 +83,15 @@ const API_BASE_URL = "http://localhost:8000";
  * }
  * ```
  */
-export async function fetchProducts(): Promise<ProductListResponse> {
+export async function fetchProducts(filters?: ProductFilterParams): Promise<ProductListResponse> {
   const endpoint = "/api/products";
-  const url = `${API_BASE_URL}${endpoint}`;
+  const queryString = buildFilterQueryString(filters);
+  const url = `${API_BASE_URL}${endpoint}${queryString}`;
 
   logger.info("fetching_products", {
     endpoint,
     url,
+    filters,
     operation: "fetchProducts",
   });
 

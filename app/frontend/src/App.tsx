@@ -2,8 +2,9 @@
  * Main application component for the Product Catalog.
  *
  * Responsibilities:
- * - Fetch products from backend API on mount
+ * - Fetch products from backend API on mount and when filters change
  * - Manage loading, error, and success states
+ * - Render ProductFilterForm for user-driven filtering
  * - Display product grid with proper error handling
  * - Provide user feedback for all states
  *
@@ -11,29 +12,33 @@
  * - products: Array of Product objects from API
  * - loading: Boolean indicating API call in progress
  * - error: String with error message (null if no error)
+ * - activeFilters: Current ProductFilterParams applied to the catalog
  *
  * Backend integration:
- * - Calls GET /api/products via fetchProducts()
+ * - Calls GET /api/products with optional query params via fetchProducts()
  * - Handles ApiError and network errors
  * - Logs all operations for debugging
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { ProductFilterForm } from "@/components/ProductFilterForm";
 import { ProductGrid } from "@/components/ProductGrid";
 import { fetchProducts } from "@/lib/api-client";
 import { logger } from "@/lib/logger";
 import { ApiError } from "@/types/error";
-import type { Product } from "@/types/product";
+import type { Product, ProductFilterParams } from "@/types/product";
 import "./index.css";
 
 /**
  * Main App component.
  *
  * Lifecycle:
- * 1. Mount: Start loading products
- * 2. Loading: Show loading spinner in ProductGrid
- * 3. Success: Display products in grid
- * 4. Error: Show error message with retry button
+ * 1. Mount: Start loading all products (no filters)
+ * 2. User submits filters: Re-fetch with filter params
+ * 3. User clears filters: Re-fetch with no params
+ * 4. Loading: Show loading spinner in ProductGrid
+ * 5. Success: Display products in grid
+ * 6. Error: Show error message with retry button
  */
 export function App() {
   // State for products data
@@ -45,32 +50,37 @@ export function App() {
   // State for error message (null = no error)
   const [error, setError] = useState<string | null>(null);
 
+  // Currently active filter parameters (undefined = no filters applied)
+  const [activeFilters, setActiveFilters] = useState<ProductFilterParams | undefined>(undefined);
+
   /**
-   * Fetch products from backend API.
+   * Fetch products from backend API with the given (or current) filters.
    *
    * Handles both ApiError (from backend) and network errors.
    * Updates state based on result.
    */
-  const loadProducts = useCallback(async () => {
+  const loadProducts = useCallback(async (filters?: ProductFilterParams) => {
     logger.info("app_loading_products", {
-      operation: "initial_load",
+      operation: "load_products",
       component: "App",
+      filters,
     });
 
     try {
       setLoading(true);
       setError(null);
 
-      // Call backend API
-      const response = await fetchProducts();
+      // Call backend API with optional filter params
+      const response = await fetchProducts(filters);
 
       // Update state with fetched products
       setProducts(response.products);
 
       logger.info("app_products_loaded", {
         products_count: response.total_count,
-        operation: "initial_load",
+        operation: "load_products",
         component: "App",
+        filters,
       });
     } catch (err) {
       // Extract error message based on error type
@@ -87,7 +97,7 @@ export function App() {
         error_message: errorMessage,
         error_type: err instanceof ApiError ? "api_error" : "network_error",
         error_code: err instanceof ApiError ? err.errorResponse.error_code : undefined,
-        operation: "initial_load",
+        operation: "load_products",
         component: "App",
         fix_suggestion:
           err instanceof ApiError
@@ -99,10 +109,31 @@ export function App() {
     }
   }, []);
 
-  // Load products on component mount
+  // Load all products on component mount
   useEffect(() => {
-    loadProducts();
+    loadProducts(undefined);
   }, [loadProducts]);
+
+  /** Apply new filters chosen by the user */
+  function handleApplyFilters(filters: ProductFilterParams) {
+    logger.info("app_apply_filters", {
+      filters,
+      operation: "apply_filters",
+      component: "App",
+    });
+    setActiveFilters(filters);
+    loadProducts(filters);
+  }
+
+  /** Clear all filters and return to the full product list */
+  function handleClearFilters() {
+    logger.info("app_clear_filters", {
+      operation: "clear_filters",
+      component: "App",
+    });
+    setActiveFilters(undefined);
+    loadProducts(undefined);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -122,6 +153,9 @@ export function App() {
 
       {/* Main content area */}
       <main className="container mx-auto px-4 py-8">
+        {/* Filter form - always visible so users can adjust or clear */}
+        <ProductFilterForm onApplyFilters={handleApplyFilters} onClearFilters={handleClearFilters} loading={loading} />
+
         {/* Error state - show error message with retry button */}
         {error ? (
           <div className="max-w-2xl mx-auto">
@@ -146,7 +180,7 @@ export function App() {
                   <p className="text-sm mt-1">{error}</p>
                   <button
                     type="button"
-                    onClick={loadProducts}
+                    onClick={() => loadProducts(activeFilters)}
                     className="mt-3 text-sm underline hover:no-underline font-medium"
                   >
                     Try again
