@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 
 from app.core.logging_config import StructuredLogger
 from app.models.error import ErrorResponse
-from app.models.product import ProductCategory, ProductListResponse
+from app.models.product import ProductCategory, ProductListResponse, ProductSortOrder
 from app.services import product_service
 
 # Initialize router for product endpoints
@@ -28,11 +28,7 @@ async def get_products(
     max_price_usd: Decimal | None = Query(default=None, ge=0, description="Maximum price filter"),
     category: ProductCategory | None = Query(default=None, description="Filter by category"),
     search_keyword: str | None = Query(default=None, min_length=1, max_length=200, description="Search keyword"),
-    sort_by: str | None = Query(
-        default=None,
-        pattern="^(price_asc|price_desc|name_asc|name_desc)$",
-        description="Sort order",
-    ),
+    sort_by: ProductSortOrder | None = Query(default=None, description="Sort order"),
 ) -> ProductListResponse | JSONResponse:
     """
     Get products from the catalog with optional filtering and sorting.

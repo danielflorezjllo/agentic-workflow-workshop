@@ -8,6 +8,9 @@ from pydantic import BaseModel, Field
 # Define valid product categories as a type alias for reusability
 ProductCategory = Literal["electronics", "clothing", "home", "sports", "books"]
 
+# Define valid sort orders as a type alias for reusability
+ProductSortOrder = Literal["price_asc", "price_desc", "name_asc", "name_desc"]
+
 
 class Product(BaseModel):
     """

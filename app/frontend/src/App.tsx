@@ -46,9 +46,6 @@ export function App() {
   // State for error message (null = no error)
   const [error, setError] = useState<string | null>(null);
 
-  // State for active filters
-  const [, setFilters] = useState<ProductFilterParams>({});
-
   /**
    * Fetch products from backend API with optional filters.
    *
@@ -106,14 +103,12 @@ export function App() {
 
   const handleApplyFilters = useCallback(
     (newFilters: ProductFilterParams) => {
-      setFilters(newFilters);
       loadProducts(newFilters);
     },
     [loadProducts]
   );
 
   const handleClearFilters = useCallback(() => {
-    setFilters({});
     loadProducts();
   }, [loadProducts]);
 

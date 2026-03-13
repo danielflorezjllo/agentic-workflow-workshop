@@ -120,14 +120,13 @@ export function ProductFilters({ onApplyFilters, onClearFilters, loading }: Prod
         <div className="flex flex-col gap-1">
           <Label>Category</Label>
           <Select
-            value={categoryValue ?? ""}
+            value={categoryValue || undefined}
             onValueChange={(val) => setValue("category", val, { shouldValidate: true })}
           >
             <SelectTrigger>
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
               <SelectItem value="electronics">Electronics</SelectItem>
               <SelectItem value="clothing">Clothing</SelectItem>
               <SelectItem value="home">Home</SelectItem>
@@ -140,12 +139,14 @@ export function ProductFilters({ onApplyFilters, onClearFilters, loading }: Prod
         {/* Sort by */}
         <div className="flex flex-col gap-1">
           <Label>Sort By</Label>
-          <Select value={sortByValue ?? ""} onValueChange={(val) => setValue("sort_by", val, { shouldValidate: true })}>
+          <Select
+            value={sortByValue || undefined}
+            onValueChange={(val) => setValue("sort_by", val, { shouldValidate: true })}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Default" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Default</SelectItem>
               <SelectItem value="price_asc">Price: Low to High</SelectItem>
               <SelectItem value="price_desc">Price: High to Low</SelectItem>
               <SelectItem value="name_asc">Name: A-Z</SelectItem>

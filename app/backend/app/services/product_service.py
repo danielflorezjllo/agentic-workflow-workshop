@@ -9,7 +9,7 @@ from decimal import Decimal
 
 from app.core.logging_config import StructuredLogger
 from app.data.seed_products import get_seed_products
-from app.models.product import Product
+from app.models.product import Product, ProductSortOrder
 
 # Initialize structured logger for this module
 logger = StructuredLogger(__name__)
@@ -51,7 +51,7 @@ def filter_products(
     max_price_usd: Decimal | None = None,
     category: str | None = None,
     search_keyword: str | None = None,
-    sort_by: str | None = None,
+    sort_by: ProductSortOrder | None = None,
 ) -> list[Product]:
     """
     Retrieve products filtered by the given criteria.
