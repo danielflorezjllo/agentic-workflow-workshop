@@ -21,9 +21,10 @@ import { logger } from "./logger";
  * Backend API base URL.
  *
  * Default: http://localhost:8000 (matching backend run_api.py port)
- * TODO: Make this configurable via build-time environment variable
+ * Override via BUN_PUBLIC_API_BASE_URL environment variable.
  */
-const API_BASE_URL = process.env.BUN_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL =
+  (typeof process !== "undefined" ? process.env?.BUN_PUBLIC_API_BASE_URL : undefined) ?? "http://localhost:8000";
 
 /**
  * Build query string from ProductFilterParams, omitting undefined/empty values.

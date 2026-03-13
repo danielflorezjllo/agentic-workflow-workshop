@@ -104,14 +104,18 @@ def get_filtered_products(
         ]
 
     # Apply sorting
-    if sort_by == "price_asc":
-        products.sort(key=lambda p: p.product_price_usd)
-    elif sort_by == "price_desc":
-        products.sort(key=lambda p: p.product_price_usd, reverse=True)
-    elif sort_by == "name_asc":
-        products.sort(key=lambda p: p.product_name.lower())
-    elif sort_by == "name_desc":
-        products.sort(key=lambda p: p.product_name.lower(), reverse=True)
+    sort_config: dict[str, tuple[str, bool]] = {
+        "price_asc": ("product_price_usd", False),
+        "price_desc": ("product_price_usd", True),
+        "name_asc": ("product_name", False),
+        "name_desc": ("product_name", True),
+    }
+    if sort_by in sort_config:
+        sort_key, reverse = sort_config[sort_by]
+        if sort_key == "product_name":
+            products.sort(key=lambda p: p.product_name.lower(), reverse=reverse)
+        else:
+            products.sort(key=lambda p: p.product_price_usd, reverse=reverse)
 
     logger.info(
         "products_filtered_successfully",
