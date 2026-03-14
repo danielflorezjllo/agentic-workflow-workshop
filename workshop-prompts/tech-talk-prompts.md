@@ -18,9 +18,49 @@ https://www.bassimeledath.com/blog/levels-of-agentic-engineering
 
 Please analyze the product catalog page in the app folder end-to-end and explain how frontend and backend integrate. Identify the main files involved, the request/response flow, and the coding patterns/conventions used (data fetching, state management, services, validation, errors, pagination/filtering)
 
-# Vibe Planning
+# Vibe Planning (Agent-Orchestrated Research)
 
-I want you to present two different approaches to tackle the following tasks. Please include the pros and cons of each approach, as well as your recommendation and the reasoning behind it.
+The goal is to explore multiple architectural approaches before implementation by delegating research to specialized sub-agents.
+
+---
+
+Spin up three sub-agents to research and propose solutions for the following tasks.
+
+
+# Sub-Agents
+
+## 1. Front-End Sub-Agent
+Investigate possible approaches for implementing the required functionality on the front end.
+
+## 2. Back-End Sub-Agent
+Investigate possible approaches for implementing the required functionality on the back end.
+
+## 3. Filters Best Practices Sub-Agent
+Research industry best practices for designing and implementing filters, including considerations for:
+
+- User experience (UX)
+- Performance
+- Scalability
+- Maintainability
+
+# Research Requirements
+
+Each sub-agent should propose **at least two viable approaches** within their area of responsibility.
+
+For every approach identified, include:
+
+- A clear explanation of the approach
+- Pros and cons
+- Trade-offs or risks
+- When the approach is most appropriate
+
+# Final Synthesis
+
+After all sub-agents complete their research, synthesize the findings into a final section that includes:
+
+- A **recommended approach**
+- The **reasoning behind the recommendation**
+- Any important **architectural or implementation considerations**
 
 Tasks
 
@@ -95,7 +135,9 @@ The interface should handle loading states, empty results, and validation errors
 
 /plan-feature
 
-I’d like you to plan the implementation. Based on on the recomendation approach and these tasks and the research you’ve done, create a detailed implementation plan. You must validate the implementation using the Agent Browser (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+Based on the recommended approach, the research results, and the tasks below, create a detailed implementation plan.
+
+You must validate the implementation using the Agent-Browser (Use Playwright MCP if Agent-Browser is not available or cannot be installed).
 
 Tasks
 
@@ -197,7 +239,17 @@ Commit the implementation plan only
 
 # EXECUTE
 
-/execute Implement the plan on [implement-product-filtering.md](http://implement-product-filtering.md/), you must user agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+Local
+
+/execute Implement the plan defined in `implement-product-filtering.md`. [implement-product-filtering.md](http://implement-product-filtering.md/)
+
+You must user agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+
+Remote
+Follow the instructions in the skill .agents/skills/execute/SKILL.md and implement the plan defined in .agents/plan/implement-product-filtering.md.
+
+You must user agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+
 
 # **Feeback**
 
