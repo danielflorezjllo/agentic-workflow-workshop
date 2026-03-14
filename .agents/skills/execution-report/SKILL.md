@@ -1,6 +1,6 @@
 ---
-name: 'execution-report'
-description: 'Generate implementation report for system review. Use after completing a feature implementation to reflect on what was built, how it aligns with the plan, challenges encountered, and divergences.'
+name: "execution-report"
+description: "Generate implementation report for system review. Use after completing a feature implementation to reflect on what was built, how it aligns with the plan, challenges encountered, and divergences."
 ---
 
 # Execution Report

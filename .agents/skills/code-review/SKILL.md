@@ -1,6 +1,6 @@
 ---
-name: 'code-review'
-description: 'Technical code review for quality and bugs that runs pre-commit. Use when you need to review recently changed files for logic errors, security issues, performance problems, and code quality.'
+name: "code-review"
+description: "Technical code review for quality and bugs that runs pre-commit. Use when you need to review recently changed files for logic errors, security issues, performance problems, and code quality."
 ---
 
 # Code Review

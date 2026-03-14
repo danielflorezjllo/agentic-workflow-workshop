@@ -1,6 +1,6 @@
 ---
-name: 'system-review'
-description: 'Analyze implementation against plan for process improvements. Use for meta-level analysis of how well implementation followed the plan, identifying divergence patterns and suggesting process improvements.'
+name: "system-review"
+description: "Analyze implementation against plan for process improvements. Use for meta-level analysis of how well implementation followed the plan, identifying divergence patterns and suggesting process improvements."
 ---
 
 # System Review
