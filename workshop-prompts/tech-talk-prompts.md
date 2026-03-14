@@ -6,6 +6,10 @@ That tiny deviation compounds over distance until you’re nowhere near where yo
 
 ![1-in-60-rule.png](Tech%20Talk/1-in-60-rule.png)
 
+https://www.bassimeledath.com/blog/levels-of-agentic-engineering
+
+![levels.png](Tech%20Talk/levels.png)
+
 ![Agentic Development Workflow.jpg](Tech%20Talk/Agentic_Development_Workflow.jpg)
 
 # Research
