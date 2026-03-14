@@ -24,7 +24,7 @@ The goal is to explore multiple architectural approaches before implementation b
 
 ---
 
-Spin up three sub-agents to research and propose solutions for the following tasks.
+Spin up three sub-agents in parallel to research and propose solutions for the following tasks.
 
 
 # Sub-Agents
