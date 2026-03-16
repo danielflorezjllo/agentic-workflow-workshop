@@ -50,62 +50,59 @@ export function App() {
   const [filters, setFilters] = useState<ProductFilterParams>({});
 
   /**
-   * Fetch products from backend API with current filters.
+   * Fetch products from backend API with the given filters.
    *
+   * Always requires explicit filters to avoid stale closure issues.
    * Handles both ApiError (from backend) and network errors.
-   * Updates state based on result.
    */
-  const loadProducts = useCallback(
-    async (activeFilters: ProductFilterParams = filters) => {
-      logger.info("app_loading_products", {
+  const loadProducts = useCallback(async (activeFilters: ProductFilterParams) => {
+    logger.info("app_loading_products", {
+      operation: "load_products",
+      component: "App",
+      filters: activeFilters,
+    });
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Call backend API with filters
+      const response = await fetchProducts(activeFilters);
+
+      // Update state with fetched products
+      setProducts(response.products);
+
+      logger.info("app_products_loaded", {
+        products_count: response.total_count,
         operation: "load_products",
         component: "App",
-        filters: activeFilters,
       });
+    } catch (err) {
+      // Extract error message based on error type
+      const errorMessage =
+        err instanceof ApiError
+          ? err.errorResponse.error_message
+          : err instanceof Error
+            ? err.message
+            : "An unknown error occurred while loading products";
 
-      try {
-        setLoading(true);
-        setError(null);
+      setError(errorMessage);
 
-        // Call backend API with filters
-        const response = await fetchProducts(activeFilters);
-
-        // Update state with fetched products
-        setProducts(response.products);
-
-        logger.info("app_products_loaded", {
-          products_count: response.total_count,
-          operation: "load_products",
-          component: "App",
-        });
-      } catch (err) {
-        // Extract error message based on error type
-        const errorMessage =
+      logger.error("app_load_products_failed", {
+        error_message: errorMessage,
+        error_type: err instanceof ApiError ? "api_error" : "network_error",
+        error_code: err instanceof ApiError ? err.errorResponse.error_code : undefined,
+        operation: "load_products",
+        component: "App",
+        fix_suggestion:
           err instanceof ApiError
-            ? err.errorResponse.error_message
-            : err instanceof Error
-              ? err.message
-              : "An unknown error occurred while loading products";
-
-        setError(errorMessage);
-
-        logger.error("app_load_products_failed", {
-          error_message: errorMessage,
-          error_type: err instanceof ApiError ? "api_error" : "network_error",
-          error_code: err instanceof ApiError ? err.errorResponse.error_code : undefined,
-          operation: "load_products",
-          component: "App",
-          fix_suggestion:
-            err instanceof ApiError
-              ? "Check backend logs for error details"
-              : "Verify backend server is running at http://localhost:8000",
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    [filters]
-  );
+            ? "Check backend logs for error details"
+            : "Verify backend server is running at http://localhost:8000",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   /** Handle filter changes from FilterPanel — store them and reload. */
   const handleFiltersChange = useCallback(
@@ -116,9 +113,9 @@ export function App() {
     [loadProducts]
   );
 
-  // Load products on component mount
+  // Load products on component mount with empty filters (all products)
   useEffect(() => {
-    loadProducts();
+    loadProducts({});
   }, [loadProducts]);
 
   return (

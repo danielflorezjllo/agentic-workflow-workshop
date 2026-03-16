@@ -5,7 +5,9 @@ This service layer separates business logic from API routing logic,
 making the code more testable and maintainable.
 """
 
+from collections.abc import Callable
 from decimal import Decimal
+from typing import Any
 
 from app.core.logging_config import StructuredLogger
 from app.data.seed_products import get_seed_products
@@ -104,7 +106,7 @@ def get_filtered_products(
             if keyword_lower in p.product_name.lower() or keyword_lower in p.product_description.lower()
         ]
 
-    sort_key_map: dict[str, tuple] = {
+    sort_key_map: dict[str, tuple[Callable[[Product], Any], bool]] = {
         "price_asc": (lambda p: p.product_price_usd, False),
         "price_desc": (lambda p: p.product_price_usd, True),
         "name_asc": (lambda p: p.product_name.lower(), False),
