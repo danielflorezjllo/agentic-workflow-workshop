@@ -260,3 +260,10 @@ It doesn’t break functionality, but it does create a sense of instability in t
 # Remove the plan (it's already on commit history)
 
 Remove the implementation plan md file
+
+# What's next? 
+
+Our North start needs to be Harness Engineering.
+
+![parallel.png](Tech%20Talk/parallel.png)
+
