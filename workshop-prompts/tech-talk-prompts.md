@@ -22,6 +22,9 @@ Please analyze the product catalog page in the app folder end-to-end and explain
 
 # Vibe Planning (Agent-Orchestrated Research)
 
+![sub-agents.png](Tech%20Talk/sub-agents.png)
+
+
 The goal is to explore multiple architectural approaches before implementation by delegating research to specialized sub-agents.
 
 ---
