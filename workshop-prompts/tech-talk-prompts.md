@@ -6,7 +6,9 @@ That tiny deviation compounds over distance until you’re nowhere near where yo
 
 ![1-in-60-rule.png](Tech%20Talk/1-in-60-rule.png)
 
-https://www.bassimeledath.com/blog/levels-of-agentic-engineering
+- The 8 Levels of Agentic Engineering: https://www.bassimeledath.com/blog/levels-of-agentic-engineering
+- Skill Issue: Harness Engineering for Coding Agents: https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents
+- Harness engineering: leveraging Codex in an agent-first world: https://openai.com/index/harness-engineering/
 
 ![levels.png](Tech%20Talk/levels.png)
 
