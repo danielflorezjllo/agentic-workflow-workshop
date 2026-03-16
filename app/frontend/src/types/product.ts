@@ -72,17 +72,14 @@ export interface ProductListResponse {
 }
 
 /**
- * Product filter parameters (for future implementation by students).
- *
- * These match the backend ProductFilterParameters that students will create.
- * Currently not implemented - will be added during the exercise.
+ * Product filter parameters matching backend GET /api/products query params.
  */
 export interface ProductFilterParams {
-  /** Filter products with price >= this amount */
-  minimum_price_usd?: number;
+  /** Filter products with price >= this amount (maps to min_price_usd query param) */
+  min_price_usd?: number;
 
-  /** Filter products with price <= this amount */
-  maximum_price_usd?: number;
+  /** Filter products with price <= this amount (maps to max_price_usd query param) */
+  max_price_usd?: number;
 
   /** Filter by specific category */
   category?: ProductCategory;
