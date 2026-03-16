@@ -241,16 +241,17 @@ Commit the implementation plan only
 
 # EXECUTE
 
-Local
+## Local
 
 /execute Implement the plan defined in `implement-product-filtering.md`. [implement-product-filtering.md](http://implement-product-filtering.md/)
 
-You must user agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+You must use agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
 
-Remote
+## Remote
+
 Follow the instructions in the skill .agents/skills/execute/SKILL.md and implement the plan defined in .agents/plan/implement-product-filtering.md.
 
-You must user agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
+You must use agent-browser to validate the frontend implementation (Use Playwright MCP if Agent-Browser is not available or can't be installed).
 
 
 # **Feeback**
